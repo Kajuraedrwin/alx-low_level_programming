@@ -1,24 +1,24 @@
 #include "main.h"
 
 /**
-  * print_line - Draws a straight line according to parameter
-  * @n: The number of lines to draw
+  * more_numbers - Print 10 times the numbers since 0 up to 14
   *
-  * Return: empty
+  * Return: 10 times of the numbers since 0 up to 14
   */
-void print_line(int n)
+void more_numbers(void)
 {
-	int x;
+	int x, y;
 
-	if (n <= 0)
+	for (x = 0; x < 10; x++)
 	{
-		_putchar('\n');
-	}
-	else
-	{
-		for (x = 0; x < n; x++)
+		for (y = 0; y <= 14; y++)
 		{
-			_putchar(95);
+			if (y > 9)
+			{
+				_putchar((y / 10) + '0');
+			}
+
+			_putchar((y % 10) + '0');
 		}
 
 		_putchar('\n');
