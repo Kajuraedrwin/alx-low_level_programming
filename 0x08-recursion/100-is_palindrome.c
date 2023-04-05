@@ -1,57 +1,45 @@
 #include "main.h"
-
-int check_palindrome(char *s);
+#include <stdio.h>
+#include <string.h>
 
 /**
   * is_palindrome - Returns if a string is palindrome
-  * @s: the string value to be checked
+  * @str: the string value to be checked
   *
   * Return: integer value
   */
-int is_palindrome(char *s)
+
+int is_palindrome(char *str)
 {
-	if (*s == '0')
-		return (1);
+	int len = strlen(str);
 
-	return (check_palindrome(s));
-}
-
-/**
-  * check_palindrome - Check if a string is palindrome
-  * @s: the string value to be checked
-  *
-  * Return: integer value
-  */
-int check_palindrome(char *s)
-{
-	int l = _strlen_recursion(s) - 1;
-
-	if (*s == s[l])
+	for (int i = 0; i < len / 2; i++)
 	{
-		s++;
-		l--;
+		if (str[i] != str[len - i - 1])
+		{
+			return (0);
+		}
 	}
-	else
-	{
-		return (0);
-	}
-
 	return (1);
 }
-
 /**
-  * _strlen_recursion - Get the length of a string
-  * @s: the string to get the length
-  *
-  * Return: the string length
-  */
-int _strlen_recursion(char *s)
-{
-	if (*s == '\0')
-	{
-		return (0);
-	}
+ * main - checks and return
+ * Return: 0
+ */
 
-	s++;
-	return (_strlen_recursion(s) + 1);
+int main(void)
+{
+	char str[100];
+
+	printf("Enter a string: ");
+	fgets(str, 100, stdin);
+	str[strcspn(str, "\n")] = '\0';
+	if (isPalindrome(str))
+	{
+		printf("%s is a palindrome.\n", str);
+	} else
+	{
+		printf("%s is not a palindrome.\n", str);
+	}
+	return (0);
 }
