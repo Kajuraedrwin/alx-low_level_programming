@@ -22,24 +22,3 @@ int is_palindrome(char *str)
 	}
 	return (1);
 }
-/**
- * main - checks and return
- * Return: 0
- */
-
-int main(void)
-{
-	char str[100];
-
-	printf("Enter a string: ");
-	fgets(str, 100, stdin);
-	str[strcspn(str, "\n")] = '\0';
-	if (isPalindrome(str))
-	{
-		printf("%s is a palindrome.\n", str);
-	} else
-	{
-		printf("%s is not a palindrome.\n", str);
-	}
-	return (0);
-}
