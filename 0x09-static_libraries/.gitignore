@@ -42,3 +42,5 @@ liball.a
 main.c
 main.o
 quote
+1-memcpy.o
+2-strspn.c
