@@ -1,104 +1,96 @@
-es (94 sloc)  2.06 KB
- 
-
+#include <stdio.h>
+#include <stdarg.h>
 #include "variadic_functions.h"
+
 /**
- * integer_print - print integers.
-(* a blank line
-*@args: the list of parameters
-* Description: this function prints integers)?
-(* section header: the header of this function is variadic_functions.h)*
-* Return:no return a void func.
-*/
-void integer_print(va_list args)
-{
-	printf("%d", va_arg(args, int));
-}
-/**
- * char_print - print chars.
-(* a blank line
-*@args: the list of parameters
-* Description: this function prints chars)?
-(* section header: the header of this function is variadic_functions.h)*
-* Return:no return a void func.
+ * printf_char - printfs a char from var args
+ *
+ * @list: va_list to print from
+ *
+ * Return: void
  */
-void char_print(va_list args)
+void printf_char(va_list list)
 {
-	printf("%c", va_arg(args, int));
-}
-/**
- * string_print - print strings
-(* a blank line
-*@args: the list of parameters
-* Description: this function prints strings)?
-(* section header: the header of this function is variadic_functions.h)*
-* Return:no return a void func.
-*/
-
-void string_print(va_list args)
-{
-	char *s;
-
-	s = va_arg(args, char *);
-	if (s == NULL)
-		s = "(nil)";
-	printf("%s", s);
+	printf("%c", (char) va_arg(list, int));
 }
 
 /**
- * float_print - print floats.
-(* a blank line
-*@args: the list of parameters
-* Description: this function prints floats)?
-(* section header: the header of this function is variadic_functions.h)*
-* Return:no return a void func.
+ * printf_int - printfs an int from var args
+ *
+ * @list: va_list to print from
+ *
+ * Return: void
  */
-void float_print(va_list args)
+void printf_int(va_list list)
 {
-	printf("%f", va_arg(args, double));
+	printf("%d", va_arg(list, int));
 }
-/**
- * print_all - print anything.
-(* a blank line
-*@format: the paramaters
-* Description: this function prints anything)?
-(* section header: the header of this function is variadic_functions.h)*
-* Return: this function no return
-*/
 
+/**
+ * printf_float - printfs a float from var args
+ *
+ * @list: va_list to print from
+ *
+ * Return: void
+ */
+void printf_float(va_list list)
+{
+	printf("%f", (float) va_arg(list, double));
+}
+
+/**
+ * printf_string - printfs a string from var args
+ *
+ * @list: va_list to print from
+ *
+ * Return: void
+ */
+void printf_string(va_list list)
+{
+	char *str = va_arg(list, char*);
+
+	while (str != NULL)
+	{
+		printf("%s", str);
+		return;
+	}
+	printf("(nil)");
+}
+
+
+/**
+ * print_all - prints various types given a format string for the arguments
+ *
+ * @format: string containing type information for args
+ *
+ * Return: void
+ */
 void print_all(const char * const format, ...)
 {
-	va_list args;
-	int i, j;
-	char *separator;
-	args_t arguments[] = {
-		{"c", char_print},
-		{"i", integer_print},
-		{"f", float_print},
-		{"s", string_print},
-		{NULL, NULL}
-	};
+	const char *ptr;
+	va_list list;
+	funckey key[4] = { {printf_char, 'c'}, {printf_int, 'i'},
+			   {printf_float, 'f'}, {printf_string, 's'} };
+	int keyind = 0, notfirst = 0;
 
-	va_start(args, format);
-	i = 0;
-	separator = "";
-
-	while (format != NULL && *(format + i) != '\0')
+	ptr = format;
+	va_start(list, format);
+	while (format != NULL && *ptr)
 	{
-		j = 0;
-		while (j < 4)
+		if (key[keyind].spec == *ptr)
 		{
-			if (*(format + i) == *(arguments[j]).format)
-			{
-				printf("%s", separator);
-				arguments[j].function(args);
-				separator = ", ";
-
-			}
-			j++;
+			if (notfirst)
+				printf(", ");
+			notfirst = 1;
+			key[keyind].f(list);
+			ptr++;
+			keyind = -1;
 		}
-		i++;
+		keyind++;
+		ptr += keyind / 4;
+		keyind %= 4;
 	}
 	printf("\n");
-	va_end(args);
+
+	va_end(list);
 }
